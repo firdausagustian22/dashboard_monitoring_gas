@@ -118,6 +118,33 @@ export default function App() {
 
   useEffect(() => {
     fetchData();
+
+    // Fallback Polling interval (setiap 2.5 detik) agar sinkron otomatis di cloud Vercel
+    const pollInterval = setInterval(async () => {
+      try {
+        const res = await sensorApi.getLatest();
+        if (res.success && res.latest) {
+          setLatestReading((current) => {
+            if (!current || current.id !== res.latest.id) {
+              setChartDataList((prev) => {
+                const next = [...prev, res.latest];
+                return next.length > 30 ? next.slice(next.length - 30) : next;
+              });
+              if (res.latest.gas_status === 'BAHAYA') {
+                playDangerBeep();
+              }
+              return res.latest;
+            }
+            return current;
+          });
+          if (res.devices) setDevices(res.devices);
+        }
+      } catch (e) {
+        // silent fail on network glitch
+      }
+    }, 2500);
+
+    return () => clearInterval(pollInterval);
   }, []);
 
   // Tangani perubahan filter riwayat
