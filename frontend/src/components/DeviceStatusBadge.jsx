@@ -5,18 +5,18 @@ export default function DeviceStatusBadge({ devices = [], latestReading }) {
   // Ambil perangkat utama atau tampilkan placeholder jika belum ada
   const primaryDevice = devices.length > 0 ? devices[0] : null;
   
-  // Perangkat dianggap ONLINE jika status 'ONLINE' dan data diterima dalam 35 detik terakhir
+  // Perangkat dianggap ONLINE jika status 'ONLINE' dari server atau data diterima dalam 60 detik terakhir
   const isRecentlyActive = primaryDevice?.last_seen 
-    ? (Date.now() - new Date(primaryDevice.last_seen).getTime()) < 35000 
+    ? (Date.now() - new Date(primaryDevice.last_seen).getTime()) < 60000 
     : false;
-  const isOnline = Boolean(primaryDevice && isRecentlyActive);
+  const isOnline = Boolean(primaryDevice && (primaryDevice.status === 'ONLINE' || isRecentlyActive));
 
   const formatLastSeen = (timestamp) => {
     if (!timestamp) return 'Belum pernah terhubung';
     try {
       const date = new Date(timestamp);
-      const diffSec = Math.floor((Date.now() - date.getTime()) / 1000);
-      if (diffSec < 5) return 'Baru saja';
+      const diffSec = Math.max(0, Math.floor((Date.now() - date.getTime()) / 1000));
+      if (diffSec < 6) return 'Baru saja';
       if (diffSec < 60) return `${diffSec} detik lalu`;
       return date.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
     } catch {

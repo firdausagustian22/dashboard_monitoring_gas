@@ -153,7 +153,7 @@ export default function App() {
         }
       } catch (e) {
         failCount++;
-        if (failCount > 3) {
+        if (failCount > 6) {
           setIsConnected(false);
         }
       }
