@@ -72,6 +72,7 @@ export default function App() {
       // Ambil data terbaru & info perangkat
       const latestRes = await sensorApi.getLatest();
       if (latestRes.success) {
+        setIsConnected(true);
         if (latestRes.latest) {
           setLatestReading(latestRes.latest);
           setChartDataList([latestRes.latest]);
@@ -119,17 +120,28 @@ export default function App() {
   useEffect(() => {
     fetchData();
 
-    // Fallback Polling interval (setiap 2.5 detik) agar sinkron otomatis di cloud Vercel
+    // Polling interval (setiap 2 detik) agar sinkron otomatis di cloud Vercel
+    let failCount = 0;
     const pollInterval = setInterval(async () => {
       try {
         const res = await sensorApi.getLatest();
         if (res.success && res.latest) {
+          failCount = 0;
+          setIsConnected(true);
           setLatestReading((current) => {
             if (!current || current.id !== res.latest.id) {
               setChartDataList((prev) => {
                 const next = [...prev, res.latest];
                 return next.length > 30 ? next.slice(next.length - 30) : next;
               });
+
+              // Sinkronkan juga tabel riwayat secara real-time
+              setHistoryData((prev) => {
+                if (prev.some((item) => item.id === res.latest.id)) return prev;
+                return [res.latest, ...prev.slice(0, pagination.limit - 1)];
+              });
+              setPagination((prev) => ({ ...prev, totalRecords: prev.totalRecords + 1 }));
+
               if (res.latest.gas_status === 'BAHAYA') {
                 playDangerBeep();
               }
@@ -140,12 +152,15 @@ export default function App() {
           if (res.devices) setDevices(res.devices);
         }
       } catch (e) {
-        // silent fail on network glitch
+        failCount++;
+        if (failCount > 3) {
+          setIsConnected(false);
+        }
       }
-    }, 2500);
+    }, 2000);
 
     return () => clearInterval(pollInterval);
-  }, []);
+  }, [pagination.limit]);
 
   // Tangani perubahan filter riwayat
   useEffect(() => {

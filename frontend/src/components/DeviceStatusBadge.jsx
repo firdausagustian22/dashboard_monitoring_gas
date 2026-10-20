@@ -4,12 +4,20 @@ import { Cpu, Wifi, WifiOff, Clock } from 'lucide-react';
 export default function DeviceStatusBadge({ devices = [], latestReading }) {
   // Ambil perangkat utama atau tampilkan placeholder jika belum ada
   const primaryDevice = devices.length > 0 ? devices[0] : null;
-  const isOnline = primaryDevice && primaryDevice.status === 'ONLINE';
+  
+  // Perangkat dianggap ONLINE jika status 'ONLINE' dan data diterima dalam 35 detik terakhir
+  const isRecentlyActive = primaryDevice?.last_seen 
+    ? (Date.now() - new Date(primaryDevice.last_seen).getTime()) < 35000 
+    : false;
+  const isOnline = Boolean(primaryDevice && isRecentlyActive);
 
   const formatLastSeen = (timestamp) => {
     if (!timestamp) return 'Belum pernah terhubung';
     try {
       const date = new Date(timestamp);
+      const diffSec = Math.floor((Date.now() - date.getTime()) / 1000);
+      if (diffSec < 5) return 'Baru saja';
+      if (diffSec < 60) return `${diffSec} detik lalu`;
       return date.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
     } catch {
       return timestamp;

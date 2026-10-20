@@ -31,15 +31,15 @@ const char* ssid = "Wokwi-GUEST";
 const char* password = "";
 
 // --- KONFIGURASI BACKEND SERVER ---
-// Ganti dengan URL tunnel/server Anda saat ini:
-const char* serverUrl = "https://old-spoons-taste.loca.lt/api/sensor/data";
+// URL Backend Cloud Vercel:
+const char* serverUrl = "https://dashboard-monitoring-gas.vercel.app/api/sensor/data";
 
 // ID & Nama Perangkat
 const char* DEVICE_ID = "ESP32-MQ2-WOKWI-01";
 const char* DEVICE_NAME = "ESP32 Node MQ-2 Lab 1";
 
-// Interval pengiriman data ke server (milidetik)
-const unsigned long SEND_INTERVAL = 2500;
+// Interval pengiriman data ke server (milidetik) - 3000ms sangat stabil untuk HTTPS Wokwi
+const unsigned long SEND_INTERVAL = 3000;
 unsigned long lastSendTime = 0;
 
 // --- PARAMETER KALIBRASI MQ-2 ---
@@ -199,6 +199,7 @@ void sendDataToBackend(int adcValue, float voltage, float rsRo, float ppm, Strin
   if (WiFi.status() != WL_CONNECTED) return;
 
   HTTPClient http;
+  http.setTimeout(5000);
   http.begin(serverUrl);
   http.addHeader("Content-Type", "application/json");
   http.addHeader("Bypass-Tunnel-Reminder", "true");

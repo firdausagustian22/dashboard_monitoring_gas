@@ -110,6 +110,12 @@ app.post(['/api/sensor/data', '/sensor/data'], (req, res) => {
 });
 
 app.get(['/api/sensor/latest', '/sensor/latest'], (req, res) => {
+  // Evaluasi status perangkat secara dinamis berbasis heartbeat waktu nyata (timeout 25 detik)
+  if (devices && devices.length > 0 && devices[0].last_seen) {
+    const timeDiffMs = Date.now() - new Date(devices[0].last_seen).getTime();
+    devices[0].status = timeDiffMs <= 25000 ? "ONLINE" : "OFFLINE";
+  }
+
   res.json({
     success: true,
     latest: latestData,

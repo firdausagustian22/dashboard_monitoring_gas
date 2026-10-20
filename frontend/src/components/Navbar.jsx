@@ -70,11 +70,11 @@ export default function Navbar({
             <span>WIB: {timeStr}</span>
           </div>
 
-          {/* Socket Connection Badge */}
+          {/* Cloud Sync Connection Badge */}
           <div className="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium border glass-panel">
             <span className={`w-2.5 h-2.5 rounded-full ${isConnected ? 'bg-emerald-400 shadow-lg shadow-emerald-400/50 animate-pulse' : 'bg-rose-500'}`}></span>
-            <span className={isConnected ? 'text-emerald-400' : 'text-rose-400'}>
-              {isConnected ? 'Server WebSocket Aktif' : 'Server Terputus'}
+            <span className={isConnected ? 'text-emerald-400 font-semibold' : 'text-rose-400'}>
+              {isConnected ? 'Cloud Online (Sinkron)' : 'Koneksi Terputus'}
             </span>
           </div>
 
