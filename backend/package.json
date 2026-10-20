@@ -1,0 +1,23 @@
+{
+  "name": "gas-monitoring-backend",
+  "version": "1.0.0",
+  "description": "IoT Gas Monitoring Backend with ESP32 & MQ-2, MySQL, Express, Socket.IO",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": ["iot", "esp32", "mq2", "monitoring", "express", "socket.io"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mysql2": "^3.9.7",
+    "socket.io": "^4.7.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}

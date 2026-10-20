@@ -1,0 +1,17 @@
+{
+  "name": "gas-monitoring-iot-root",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Root workspace runner for Gas Monitoring IoT Dashboard (ESP32 & MQ-2)",
+  "scripts": {
+    "start": "concurrently -n \"BACKEND,FRONTEND\" -c \"cyan,magenta\" \"npm --prefix backend start\" \"npm --prefix frontend dev\"",
+    "dev": "concurrently -n \"BACKEND,FRONTEND\" -c \"cyan,magenta\" \"npm --prefix backend start\" \"npm --prefix frontend dev\"",
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend dev",
+    "start:backend": "npm --prefix backend start",
+    "install:all": "npm --prefix backend install && npm --prefix frontend install"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

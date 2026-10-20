@@ -1,0 +1,64 @@
+{
+  "version": 1,
+  "author": "IoT Gas Monitoring Team",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "board-esp32-devkit-c-v4", "id": "esp", "top": 40, "left": -20, "attrs": {} },
+    {
+      "type": "wokwi-gas-sensor",
+      "id": "gas1",
+      "top": 0,
+      "left": -230,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-lcd1602",
+      "id": "lcd1",
+      "top": -140,
+      "left": 130,
+      "attrs": { "pins": "i2c" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led1",
+      "top": 70,
+      "left": 140,
+      "attrs": { "color": "red" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r1",
+      "top": 150,
+      "left": 140,
+      "attrs": { "value": "220" }
+    },
+    {
+      "type": "wokwi-buzzer",
+      "id": "bz1",
+      "top": 130,
+      "left": -200,
+      "attrs": { "volume": "0.1" }
+    }
+  ],
+  "connections": [
+    [ "esp:TX", "$serial:rx", "", [] ],
+    [ "esp:RX", "$serial:tx", "", [] ],
+
+    [ "esp:3V3", "gas1:VCC", "red", [ "v0" ] ],
+    [ "esp:GND.1", "gas1:GND", "black", [ "v0" ] ],
+    [ "gas1:AOUT", "esp:34", "green", [ "v0" ] ],
+
+    [ "lcd1:GND", "esp:GND.1", "black", [ "v0" ] ],
+    [ "lcd1:VCC", "esp:5V", "red", [ "v0" ] ],
+    [ "lcd1:SDA", "esp:21", "cyan", [ "v0" ] ],
+    [ "lcd1:SCL", "esp:22", "blue", [ "v0" ] ],
+
+    [ "esp:4", "led1:A", "black", [ "v0" ] ],
+    [ "led1:C", "r1:1", "green", [ "v0" ] ],
+    [ "r1:2", "esp:GND.2", "green", [ "v0" ] ],
+
+    [ "esp:13", "bz1:2", "purple", [ "v0" ] ],
+    [ "bz1:1", "esp:GND.1", "black", [ "v0" ] ]
+  ],
+  "dependencies": {}
+}
