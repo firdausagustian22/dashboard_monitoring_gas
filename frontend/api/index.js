@@ -1,5 +1,5 @@
-const express = require('express');
-const cors = require('cors');
+import express from 'express';
+import cors from 'cors';
 
 const app = express();
 
@@ -67,10 +67,10 @@ function calculatePPM(adc) {
   };
 }
 
-// Handler fleksibel untuk path dengan atau tanpa awalan /api
+// Handler fleksibel untuk path /api
 app.all(['/api', '/'], (req, res) => {
   res.json({
-    service: 'GasGuard IoT Serverless API (Vercel)',
+    service: 'GasGuard IoT Serverless API (Vercel Cloud)',
     status: 'ONLINE',
     device: latestData.device_id,
     latest_ppm: latestData.ppm_estimate,
@@ -172,4 +172,4 @@ app.post(['/api/sensor/demo/generate', '/sensor/demo/generate'], (req, res) => {
   return app._router.handle(req, res, () => {});
 });
 
-module.exports = app;
+export default app;
