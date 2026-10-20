@@ -155,13 +155,9 @@ app.get(['/api/sensor/latest', '/sensor/latest'], (req, res) => {
 });
 
 app.get(['/api/sensor/history', '/sensor/history'], (req, res) => {
-  const { isDemo, page = 1, limit = 15 } = req.query;
-  let filtered = [...sensorHistory];
-
-  if (isDemo !== undefined && isDemo !== 'all') {
-    const dVal = (isDemo === '1' || isDemo === 'true');
-    filtered = filtered.filter(item => item.is_demo === dVal);
-  }
+  const { page = 1, limit = 15 } = req.query;
+  // Selalu tampilkan data riil dari Wokwi ESP32
+  const filtered = sensorHistory.filter(item => !item.is_demo);
 
   res.json({
     success: true,

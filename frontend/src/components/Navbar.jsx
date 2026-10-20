@@ -91,14 +91,6 @@ export default function Navbar({
             {alarmMuted ? <BellOff className="w-4 h-4" /> : <BellRing className="w-4 h-4 text-amber-400" />}
           </button>
 
-          {/* Simulator Demo Trigger */}
-          <button
-            onClick={onToggleDemoModal}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 text-xs font-medium transition-all shadow-sm"
-          >
-            <PlayCircle className="w-4 h-4 text-indigo-400" />
-            <span>Simulasi Demo</span>
-          </button>
 
           {/* Settings Button */}
           <button

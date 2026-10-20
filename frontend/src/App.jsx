@@ -298,12 +298,6 @@ export default function App() {
         onSettingsSaved={(newSettings) => setSettings(newSettings)}
         currentADC={latestReading?.adc_value}
       />
-
-      {/* Demo Simulator Control Modal */}
-      <DemoControl
-        isOpen={isDemoOpen}
-        onClose={() => setIsDemoOpen(false)}
-      />
     </div>
   );
 }

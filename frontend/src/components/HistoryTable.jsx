@@ -117,22 +117,8 @@ export default function HistoryTable({
           />
         </div>
 
-        {/* Data Source Filter (Real vs Demo) */}
-        <div className="flex items-center gap-1.5 bg-slate-800/90 px-2.5 py-1 rounded-lg border border-slate-700">
-          <span className="text-slate-400">Sumber:</span>
-          <select
-            value={filters.isDemo}
-            onChange={(e) => onFilterChange({ ...filters, isDemo: e.target.value })}
-            className="bg-transparent text-slate-200 outline-none text-xs cursor-pointer"
-          >
-            <option value="all" className="bg-slate-900">Semua Data</option>
-            <option value="0" className="bg-slate-900">Hanya Sensor Fisik (Aktual)</option>
-            <option value="1" className="bg-slate-900">Hanya Data Demo (Simulasi)</option>
-          </select>
-        </div>
-
         {/* Reset Filters */}
-        {(filters.startDate || filters.endDate || filters.isDemo !== 'all') && (
+        {(filters.startDate || filters.endDate) && (
           <button
             onClick={() => onFilterChange({ startDate: '', endDate: '', isDemo: 'all' })}
             className="text-cyan-400 hover:text-cyan-300 underline font-medium ml-auto"
@@ -195,15 +181,9 @@ export default function HistoryTable({
                     {getStatusBadge(row.gas_status)}
                   </td>
                   <td className="py-2.5 px-3 font-sans">
-                    {row.is_demo ? (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/30">
-                        <FlaskConical className="w-3 h-3" /> DEMO
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
-                        <Cpu className="w-3 h-3" /> AKTUAL
-                      </span>
-                    )}
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
+                      <Cpu className="w-3 h-3" /> Wokwi ESP32
+                    </span>
                   </td>
                 </tr>
               ))

@@ -74,19 +74,12 @@ export default function DeviceStatusBadge({ devices = [], latestReading }) {
         {/* Heartbeat & Data Source Type */}
         <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto justify-between sm:justify-end text-xs">
           {/* Data Tag indicator */}
-          {latestReading && (
-            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-xs font-medium">
-              {latestReading.is_demo ? (
-                <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">
-                  Mode Simulasi Demo
-                </span>
-              ) : (
-                <span className="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
-                  Sensor Fisik / Wokwi Aktual
-                </span>
-              )}
-            </div>
-          )}
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-xs font-medium">
+            <span className="px-2.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 flex items-center gap-1.5 font-medium">
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+              Koneksi: Wokwi ESP32 Live
+            </span>
+          </div>
 
           {/* Last Seen Tracker */}
           <div className="flex items-center gap-1.5 text-slate-400 px-3 py-1.5 rounded-lg bg-slate-900/60 border border-slate-800">
