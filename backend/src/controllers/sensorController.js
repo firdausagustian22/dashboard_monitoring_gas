@@ -39,8 +39,27 @@ async function postSensorData(req, res) {
       gas_type: 'LPG'
     };
 
-    // 3. Lakukan konversi fisik dan kalibrasi MQ-2 (Tanpa PPM palsu / tanpa menyamakan ADC dengan PPM)
-    const calculation = calculateMQ2PPM(adc, settings);
+    // 3. Lakukan konversi fisik dan kalibrasi MQ-2 (atau gunakan kalkulasi langsung jika dikirim dari ESP32)
+    const { ppm_estimate, voltage: reqVoltage, rs_ro_ratio: reqRsRo, gas_status: reqStatus } = req.body;
+    let calculation;
+    if (ppm_estimate !== undefined && ppm_estimate !== null && !isNaN(Number(ppm_estimate))) {
+      const p = Number(ppm_estimate);
+      let s = reqStatus;
+      if (!s) {
+        if (p >= settings.danger_ppm) s = 'BAHAYA';
+        else if (p >= settings.warning_ppm) s = 'WASPADA';
+        else s = 'AMAN';
+      }
+      calculation = {
+        adcValue: adc,
+        voltage: reqVoltage !== undefined ? Number(reqVoltage) : Number(((adc / 4095.0) * 3.3).toFixed(2)),
+        rsRoRatio: reqRsRo !== undefined ? Number(reqRsRo) : 1.0,
+        ppmEstimate: Number(p.toFixed(1)),
+        gasStatus: s
+      };
+    } else {
+      calculation = calculateMQ2PPM(adc, settings);
+    }
 
     // 4. Perbarui status perangkat (Heartbeat & Status ONLINE)
     await pool.query(

@@ -208,6 +208,10 @@ void sendDataToBackend(int adcValue, float voltage, float rsRo, float ppm, Strin
   jsonPayload += "\"device_id\":\"" + String(DEVICE_ID) + "\",";
   jsonPayload += "\"device_name\":\"" + String(DEVICE_NAME) + "\",";
   jsonPayload += "\"adc_value\":" + String(adcValue) + ",";
+  jsonPayload += "\"voltage\":" + String(voltage, 2) + ",";
+  jsonPayload += "\"rs_ro_ratio\":" + String(rsRo, 2) + ",";
+  jsonPayload += "\"ppm_estimate\":" + String(ppm, 1) + ",";
+  jsonPayload += "\"gas_status\":\"" + statusStr + "\",";
   jsonPayload += "\"is_demo\":false";
   jsonPayload += "}";
 

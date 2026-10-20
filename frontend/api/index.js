@@ -79,8 +79,38 @@ app.all(['/api', '/'], (req, res) => {
 });
 
 app.post(['/api/sensor/data', '/sensor/data'], (req, res) => {
-  const { device_id = 'ESP32-MQ2-WOKWI-01', adc_value = 0, is_demo = false } = req.body;
-  const calc = calculatePPM(adc_value);
+  const { 
+    device_id = 'ESP32-MQ2-WOKWI-01', 
+    adc_value = 0, 
+    voltage,
+    rs_ro_ratio,
+    ppm_estimate,
+    gas_status,
+    is_demo = false 
+  } = req.body;
+
+  let calc;
+  // Jika ESP32 mengirimkan ppm_estimate langsung, pakai langsung agar 100% sinkron dengan LCD Wokwi
+  if (ppm_estimate !== undefined && ppm_estimate !== null && !isNaN(Number(ppm_estimate))) {
+    const rawPPM = Number(ppm_estimate);
+    const adc = Number(adc_value);
+    const v = voltage !== undefined ? Number(voltage) : Number(((adc / 4095.0) * 3.3).toFixed(2));
+    let status = gas_status;
+    if (!status) {
+      if (rawPPM >= settings.danger_ppm) status = "BAHAYA";
+      else if (rawPPM >= settings.warning_ppm) status = "WASPADA";
+      else status = "AMAN";
+    }
+    calc = {
+      adcValue: adc,
+      voltage: v,
+      rsRoRatio: rs_ro_ratio !== undefined ? Number(rs_ro_ratio) : 1.0,
+      ppmEstimate: Number(rawPPM.toFixed(1)),
+      gasStatus: status
+    };
+  } else {
+    calc = calculatePPM(adc_value);
+  }
 
   latestData = {
     id: Date.now(),
