@@ -200,8 +200,8 @@ app.post(['/api/sensor/demo/generate', '/sensor/demo/generate'], (req, res) => {
   const { scenario = 'random' } = req.body;
   let adc = 350;
   if (scenario === 'safe') adc = Math.floor(Math.random() * 150) + 250;
-  else if (scenario === 'warning') adc = Math.floor(Math.random() * 300) + 1200;
-  else if (scenario === 'danger') adc = Math.floor(Math.random() * 800) + 2400;
+  else if (scenario === 'warning') adc = Math.floor(Math.random() * 200) + 1650;
+  else if (scenario === 'danger') adc = Math.floor(Math.random() * 600) + 2300;
   else adc = Math.floor(Math.random() * 2500) + 300;
 
   const calc = calculatePPM(adc);

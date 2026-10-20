@@ -89,7 +89,7 @@ export default function DemoControl({ isOpen, onClose }) {
               <AlertTriangle className="w-4 h-4 text-amber-400" />
               <span>Simulasi Asap / Gas Sedang (WASPADA)</span>
             </div>
-            <span className="font-mono text-slate-400 text-[11px]">ADC ~1350</span>
+            <span className="font-mono text-slate-400 text-[11px]">ADC ~1750</span>
           </button>
 
           <button
