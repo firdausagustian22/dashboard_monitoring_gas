@@ -199,13 +199,35 @@ app.put(['/api/settings', '/settings'], (req, res) => {
 app.post(['/api/sensor/demo/generate', '/sensor/demo/generate'], (req, res) => {
   const { scenario = 'random' } = req.body;
   let adc = 350;
-  if (scenario === 'safe') adc = Math.floor(Math.random() * 200) + 200;
-  else if (scenario === 'warning') adc = Math.floor(Math.random() * 400) + 1100;
-  else if (scenario === 'danger') adc = Math.floor(Math.random() * 1000) + 2200;
+  if (scenario === 'safe') adc = Math.floor(Math.random() * 150) + 250;
+  else if (scenario === 'warning') adc = Math.floor(Math.random() * 300) + 1200;
+  else if (scenario === 'danger') adc = Math.floor(Math.random() * 800) + 2400;
   else adc = Math.floor(Math.random() * 2500) + 300;
 
-  req.body = { device_id: 'SIMULATOR-DEMO', adc_value: adc, is_demo: true };
-  return app._router.handle(req, res, () => {});
+  const calc = calculatePPM(adc);
+
+  latestData = {
+    id: Date.now(),
+    device_id: 'SIMULATOR-DEMO',
+    device_name: 'Wokwi Simulator (Demo Mode)',
+    adc_value: calc.adcValue,
+    voltage: calc.voltage,
+    rs_ro_ratio: calc.rsRoRatio,
+    ppm_estimate: calc.ppmEstimate,
+    gas_status: calc.gasStatus,
+    gas_type: settings.gas_type,
+    is_demo: true,
+    created_at: new Date().toISOString()
+  };
+
+  sensorHistory.unshift(latestData);
+  if (sensorHistory.length > 50) sensorHistory.pop();
+
+  return res.status(201).json({
+    success: true,
+    message: `Data simulasi ${scenario.toUpperCase()} berhasil dibuat`,
+    data: latestData
+  });
 });
 
 export default app;
